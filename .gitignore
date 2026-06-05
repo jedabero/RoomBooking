@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+docs/coverage/*
+!docs/coverage/.gitkeep
+*.tsbuildinfo
+.DS_Store
+*.log
+.vite/
