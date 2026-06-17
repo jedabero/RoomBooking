@@ -1,5 +1,10 @@
 # RoomBooking — Pruebas Unitarias
 
+[![CI](https://github.com/USER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/USER/REPO/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/USER/REPO/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/USER/REPO)
+
+> **Nota:** Reemplaza `USER/REPO` y `YOUR_TOKEN` con los valores de tu repositorio en GitHub.
+
 Sistema de reserva de salas. Este proyecto aplica las estrategias del **Taller de Pruebas Unitarias** para diseñar, implementar y validar un módulo de negocio mediante **pruebas automatizadas** con TypeScript y Vitest.
 
 ---
@@ -162,6 +167,12 @@ npx vitest run --coverage
 | 35 – 44          | Buen trabajo con documentación o cobertura parcial. |
 | 30 – 34          | Cumple con lo básico pero sin profundidad. |
 | < 30             | No cumple con los criterios mínimos del taller/proyecto. |
+
+---
+
+## Documentación completa
+
+La documentación detallada del proyecto (TDD, AAA, Clases de Equivalencia, BDD, cobertura y conclusiones) se encuentra en [`docs/wiki/`](docs/wiki/) y está diseñada para publicarse en el **Wiki del repositorio**.
 
 ---
 
