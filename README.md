@@ -1,17 +1,16 @@
 # RoomBooking — Pruebas Unitarias
 
-[![CI](https://github.com/USER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/USER/REPO/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/USER/REPO/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/USER/REPO)
+[![CI](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml/badge.svg)](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml)
 
-> **Nota:** Reemplaza `USER/REPO` y `YOUR_TOKEN` con los valores de tu repositorio en GitHub.
+> **Nota Codecov:** la carga de cobertura está configurada en GitHub Actions, pero el badge de Codecov se deja pendiente hasta validar la configuración del repositorio en Codecov.
 
-Sistema de reserva de salas. Este proyecto aplica las estrategias del **Taller de Pruebas Unitarias** para diseñar, implementar y validar un módulo de negocio mediante **pruebas automatizadas** con TypeScript y Vitest.
+**RoomBooking** es el repositorio académico. **RoomBooker** es el sistema de reserva de salas modelado en este proyecto. El proyecto aplica las estrategias del **Taller de Pruebas Unitarias** para diseñar, implementar y validar reglas puras de dominio mediante **pruebas automatizadas** con TypeScript y Vitest.
 
 ---
 
 ## Dominio
 
-**RoomBooking** permite gestionar la reserva de salas de reunión. Las reglas de negocio incluyen:
+**RoomBooker / RoomBooking** permite gestionar la reserva de salas de reunión. Las reglas de negocio incluyen:
 
 - Validar disponibilidad de una sala en un rango de tiempo.
 - Detectar conflictos entre reservas existentes.

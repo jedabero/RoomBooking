@@ -1,23 +1,26 @@
-# RoomBooking — Documentación del Proyecto
+# RoomBooker / RoomBooking — Wiki
 
-## Descripción del dominio
+**RoomBooking** es el repositorio académico `jedabero/RoomBooking`. **RoomBooker** es el sistema de reserva de salas modelado en este trabajo.
 
-**RoomBooking** es un sistema de reserva de salas de reunión. El propósito del sistema es gestionar la disponibilidad, asignación y control de salas en una organización, asegurando que las reglas de negocio se cumplan antes de confirmar una reserva.
+Esta Wiki documenta la actividad de pruebas unitarias de la Unidad 3 para reglas puras de dominio, sin base de datos, HTTP, UI ni frameworks web.
 
-### Reglas de negocio
+## Navegación
 
-1. **Validación de salas** — Una sala debe tener un identificador, un nombre y una capacidad válida (entero positivo) para poder ser registrada.
-2. **Políticas de reserva** — Las reservas deben cumplir con restricciones de duración máxima y anticipación mínima.
-3. **Detección de conflictos** — No pueden existir dos reservas que se superpongan en la misma sala y en el mismo rango de tiempo.
-4. **Disponibilidad** — Una sala solo puede reservarse si está disponible en el rango solicitado.
-5. **Permisos por rol** — El acceso a las operaciones del sistema depende del rol del usuario (ADMIN, MANAGER, USER).
+- [01 — Dominio RoomBooker](01-Dominio-RoomBooker)
+- [02 — TDD Red Green Refactor](02-TDD-Red-Green-Refactor)
+- [03 — Patrón AAA](03-Patron-AAA)
+- [04 — Clases de Equivalencia y Valores Límite](04-Clases-de-Equivalencia-y-Valores-Limite)
+- [05 — Escenarios BDD](05-Escenarios-BDD)
+- [06 — Cobertura y Resultados](06-Cobertura-y-Resultados)
+- [07 — Matriz de Trazabilidad](07-Matriz-de-Trazabilidad)
+- [08 — Conclusiones](08-Conclusiones)
 
-### Problema a resolver
-
-Diseñar e implementar un módulo de dominio puro que valide estas reglas de negocio mediante **pruebas unitarias automatizadas**, siguiendo la metodología TDD, el patrón AAA, y documentando mediante Clases de Equivalencia y escenarios BDD.
-
-### Integrantes del equipo
+## Integrantes
 
 - Jeison David Berdugo Orejarena
 - Jagler David Velasquez Velasquez
 - Rigo Armando Rosero Castillo
+
+## Estado de entrega
+
+El proyecto contiene cinco reglas de dominio probadas con Vitest y cobertura local configurada con V8.

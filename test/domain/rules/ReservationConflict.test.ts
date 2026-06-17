@@ -43,6 +43,36 @@ describe('ReservationConflict', () => {
       expect(result).toBe(false)
     })
 
+    it('shouldReturnFalseWhenNewReservationEndsExactlyAtExistingStart', () => {
+      // Arrange / Given
+      const conflict = new ReservationConflict()
+      const reservation = makeReservation('1', 'room-1', new Date('2026-01-01T08:00'), new Date('2026-01-01T09:00'))
+      const existing = [
+        makeReservation('2', 'room-1', new Date('2026-01-01T09:00'), new Date('2026-01-01T10:00')),
+      ]
+
+      // Act / When
+      const result = conflict.check(reservation, existing)
+
+      // Assert / Then
+      expect(result).toBe(false)
+    })
+
+    it('shouldReturnFalseWhenNewReservationStartsExactlyAtExistingEnd', () => {
+      // Arrange / Given
+      const conflict = new ReservationConflict()
+      const reservation = makeReservation('1', 'room-1', new Date('2026-01-01T10:00'), new Date('2026-01-01T11:00'))
+      const existing = [
+        makeReservation('2', 'room-1', new Date('2026-01-01T09:00'), new Date('2026-01-01T10:00')),
+      ]
+
+      // Act / When
+      const result = conflict.check(reservation, existing)
+
+      // Assert / Then
+      expect(result).toBe(false)
+    })
+
     it('shouldReturnTrueWhenExactOverlap', () => {
       const conflict = new ReservationConflict()
       const reservation = makeReservation('1', 'room-1', new Date('2026-01-01T10:00'), new Date('2026-01-01T11:00'))
