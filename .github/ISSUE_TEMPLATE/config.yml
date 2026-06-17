@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Guia de gestion de defectos
+    url: https://github.com/jedabero/RoomBooking/tree/main/docs/defect-management
+    about: Se recomienda usar los templates para conservar trazabilidad, severidad, prioridad y evidencia.

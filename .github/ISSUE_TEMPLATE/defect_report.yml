@@ -1,0 +1,94 @@
+name: Defect report
+description: Registrar un defecto para la fase formal de gestion.
+title: "[Defect]: "
+labels: ["type:defect", "status:new"]
+body:
+  - type: dropdown
+    id: module
+    attributes:
+      label: Modulo afectado
+      options:
+        - auth
+        - rooms
+        - availability
+        - reservations
+        - integration
+        - performance
+        - ci
+        - documentation
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severidad
+      options:
+        - severity:critical
+        - severity:high
+        - severity:medium
+        - severity:low
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridad
+      options:
+        - priority:p1
+        - priority:p2
+        - priority:p3
+        - priority:p4
+    validations:
+      required: true
+  - type: dropdown
+    id: defect_type
+    attributes:
+      label: Tipo de defecto
+      options:
+        - Funcional
+        - Integracion
+        - Sistema
+        - Rendimiento
+        - Seguridad/permisos
+        - Documentacion
+        - CI/configuracion
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducir
+      description: Incluir comandos, datos de entrada o flujo seguido.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Resultado obtenido
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidencia
+      description: Adjuntar logs, capturas, coverage, k6, workflow o diff.
+    validations:
+      required: true
+  - type: input
+    id: related_test
+    attributes:
+      label: Prueba relacionada
+      placeholder: test/integration/... o comando ejecutado
+  - type: textarea
+    id: closure
+    attributes:
+      label: Criterio de cierre
+      description: Condicion verificable para cerrar el defecto.
+    validations:
+      required: true

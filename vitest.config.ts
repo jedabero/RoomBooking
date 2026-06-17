@@ -15,6 +15,7 @@ export default defineConfig({
       ],
       exclude: [
         'src/domain/**/index.ts',
+        'src/delivery/http/PerformanceServer.ts',
       ],
       thresholds: {
         branches: 80,

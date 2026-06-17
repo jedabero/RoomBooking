@@ -138,7 +138,7 @@ Se ejecutaron localmente los seis escenarios definidos. Todos aprobaron sus thre
 | Stress | `perf/results/stress-summary.json` | Aprobado | `0.74 ms` | `1.13 ms` | `0%` | `99.81 req/s` | `3828` | `57.94%` |
 | Spike | `perf/results/spike-summary.json` | Aprobado | `0.90 ms` | `1.35 ms` | `0%` | `132.33 req/s` | `3164` | `40.68%` |
 | Soak | `perf/results/soak-summary.json` | Aprobado | `1.43 ms` | `2.05 ms` | `0%` | `64.14 req/s` | `4800` | `58.73%` |
-| Regresión | `perf/results/regression-summary.json` | Aprobado | `0.85 ms` | `1.07 ms` | `0%` | `17.19 req/s` | `225` | `0%` |
+| Regresión | `perf/results/regression-summary.json` | Aprobado | `0.93 ms` | `1.30 ms` | `0%` | `16.80 req/s` | `225` | `0%` |
 
 La métrica `reservation_conflicts` mide respuestas `409` por conflicto funcional de reserva. Estos conflictos no se contabilizan como error técnico cuando son respuestas esperadas de negocio bajo concurrencia.
 
@@ -169,10 +169,10 @@ Baseline y regresión operan con baja carga constante, load incrementa progresiv
 
 ## 10. Análisis de métricas
 
-- Latencia promedio: baseline `0.44 ms`, load `0.41 ms`, stress `0.50 ms`, spike `0.44 ms`, soak `0.65 ms`, regresión `0.47 ms`.
-- p95: baseline `0.79 ms`, load `0.60 ms`, stress `0.74 ms`, spike `0.90 ms`, soak `1.43 ms`, regresión `0.85 ms`.
-- p99: baseline `0.93 ms`, load `0.76 ms`, stress `1.13 ms`, spike `1.35 ms`, soak `2.05 ms`, regresión `1.07 ms`.
-- Throughput: baseline `10.31 req/s`, load `49.20 req/s`, stress `99.81 req/s`, spike `132.33 req/s`, soak `64.14 req/s`, regresión `17.19 req/s`.
+- Latencia promedio: baseline `0.44 ms`, load `0.41 ms`, stress `0.50 ms`, spike `0.44 ms`, soak `0.65 ms`, regresión `0.50 ms`.
+- p95: baseline `0.79 ms`, load `0.60 ms`, stress `0.74 ms`, spike `0.90 ms`, soak `1.43 ms`, regresión `0.93 ms`.
+- p99: baseline `0.93 ms`, load `0.76 ms`, stress `1.13 ms`, spike `1.35 ms`, soak `2.05 ms`, regresión `1.30 ms`.
+- Throughput: baseline `10.31 req/s`, load `49.20 req/s`, stress `99.81 req/s`, spike `132.33 req/s`, soak `64.14 req/s`, regresión `16.80 req/s`.
 - Tasa de errores: `0%` en todos los escenarios ejecutados.
 - Conflictos funcionales `409`: se presentaron en load, stress, spike y soak como efecto esperado de concurrencia, sin convertirse en errores técnicos.
 

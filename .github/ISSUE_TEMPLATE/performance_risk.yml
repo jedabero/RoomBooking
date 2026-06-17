@@ -1,0 +1,77 @@
+name: Performance risk
+description: Registrar un riesgo de rendimiento pendiente de confirmacion.
+title: "[Performance Risk]: "
+labels: ["type:risk", "module:performance", "status:new"]
+body:
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severidad estimada
+      options:
+        - severity:critical
+        - severity:high
+        - severity:medium
+        - severity:low
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridad
+      options:
+        - priority:p1
+        - priority:p2
+        - priority:p3
+        - priority:p4
+    validations:
+      required: true
+  - type: dropdown
+    id: risk_type
+    attributes:
+      label: Tipo de riesgo
+      options:
+        - Latencia
+        - Throughput
+        - Error rate
+        - Conflictos funcionales
+        - Observabilidad
+        - Estabilidad prolongada
+    validations:
+      required: true
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Escenario evaluado
+      description: Indicar baseline, load, stress, spike, soak o regression.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidencia
+      description: Adjuntar resultado k6, archivo perf/results, SLO o workflow.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Resultado obtenido
+    validations:
+      required: true
+  - type: input
+    id: related_test
+    attributes:
+      label: Prueba relacionada
+      placeholder: npm run perf:regression
+  - type: textarea
+    id: closure
+    attributes:
+      label: Criterio de cierre
+    validations:
+      required: true

@@ -17,4 +17,5 @@
 - [[14-SLO-y-Escenarios-de-Rendimiento|14 SLO y Escenarios]]
 - [[15-Resultados-y-Analisis-de-Rendimiento|15 Resultados Rendimiento]]
 - [[16-Defectos-de-Rendimiento-y-Mejoras|16 Defectos Rendimiento]]
+- [[17-Preparacion-Gestion-de-Defectos|17 Preparación Gestión de Defectos]]
 - [[08-Conclusiones|Conclusiones Unitarias]]

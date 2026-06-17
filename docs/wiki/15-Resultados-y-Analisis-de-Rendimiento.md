@@ -13,7 +13,7 @@ Se ejecutaron localmente los seis escenarios definidos con k6. Todos aprobaron s
 | Stress | `perf/results/stress-summary.json` | Aprobado | `0.74 ms` | `1.13 ms` | `0%` | `99.81 req/s` | `57.94%` |
 | Spike | `perf/results/spike-summary.json` | Aprobado | `0.90 ms` | `1.35 ms` | `0%` | `132.33 req/s` | `40.68%` |
 | Soak | `perf/results/soak-summary.json` | Aprobado | `1.43 ms` | `2.05 ms` | `0%` | `64.14 req/s` | `58.73%` |
-| Regresión | `perf/results/regression-summary.json` | Aprobado | `0.85 ms` | `1.07 ms` | `0%` | `17.19 req/s` | `0%` |
+| Regresión | `perf/results/regression-summary.json` | Aprobado | `0.93 ms` | `1.30 ms` | `0%` | `16.80 req/s` | `0%` |
 
 La métrica `reservation_conflicts` representa respuestas `409` por conflicto funcional de reserva. No se considera error técnico cuando ocurre como respuesta esperada de negocio bajo concurrencia.
 

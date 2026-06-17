@@ -145,6 +145,8 @@ src/infrastructure/**
 src/delivery/**
 ```
 
+El servidor local `src/delivery/http/PerformanceServer.ts` se excluye de cobertura porque se valida con k6 como infraestructura de rendimiento, no como lógica funcional de la suite Vitest.
+
 Resultado local de referencia:
 
 ```text
@@ -245,6 +247,19 @@ Para la entrega académica se recomienda adjuntar evidencia visual en la Wiki re
 ### CI manual
 
 El workflow `.github/workflows/performance.yml` se ejecuta manualmente con `workflow_dispatch` y corre únicamente la regresión de rendimiento para evitar costos e inestabilidad de escenarios largos.
+
+---
+
+## Preparación para gestión de defectos
+
+El repositorio incluye una estructura preparatoria para una fase posterior de gestión formal de defectos:
+
+- [`docs/defect-management/README.md`](docs/defect-management/README.md)
+- [`docs/defect-management/defect-report-template.md`](docs/defect-management/defect-report-template.md)
+- [`docs/defect-management/defect-severity-priority-guide.md`](docs/defect-management/defect-severity-priority-guide.md)
+- [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/)
+
+Esta preparación no reemplaza la gestión formal de defectos ni crea GitHub Issues reales. La trazabilidad definitiva contra pruebas, evidencias, commits, workflows o documentación se realizará en una fase posterior.
 
 ---
 

@@ -1,0 +1,84 @@
+- name: type:defect
+  color: d73a4a
+  description: Defecto funcional o tecnico confirmado.
+- name: type:risk
+  color: fbca04
+  description: Riesgo pendiente de confirmacion.
+- name: type:improvement
+  color: a2eeef
+  description: Mejora propuesta.
+- name: type:documentation
+  color: 0075ca
+  description: Cambio o correccion documental.
+- name: type:test
+  color: 5319e7
+  description: Cambio relacionado con pruebas.
+- name: severity:critical
+  color: b60205
+  description: Impacto critico.
+- name: severity:high
+  color: d93f0b
+  description: Impacto alto.
+- name: severity:medium
+  color: fbca04
+  description: Impacto medio.
+- name: severity:low
+  color: 0e8a16
+  description: Impacto bajo.
+- name: priority:p1
+  color: b60205
+  description: Atencion inmediata.
+- name: priority:p2
+  color: d93f0b
+  description: Atencion pronta.
+- name: priority:p3
+  color: fbca04
+  description: Planificable.
+- name: priority:p4
+  color: cfd3d7
+  description: Diferible.
+- name: status:new
+  color: cfd3d7
+  description: Recien reportado.
+- name: status:triaged
+  color: 1d76db
+  description: Clasificado por el equipo.
+- name: status:in-progress
+  color: 0052cc
+  description: En correccion o analisis.
+- name: status:resolved
+  color: 0e8a16
+  description: Resuelto por el equipo.
+- name: status:in-validation
+  color: 5319e7
+  description: Pendiente de validacion QA.
+- name: status:closed
+  color: 0e8a16
+  description: Cerrado con evidencia.
+- name: status:reopened
+  color: b60205
+  description: Reabierto tras validacion.
+- name: module:auth
+  color: 0366d6
+  description: Autenticacion o permisos.
+- name: module:rooms
+  color: 0366d6
+  description: Gestion de salas.
+- name: module:availability
+  color: 0366d6
+  description: Disponibilidad.
+- name: module:reservations
+  color: 0366d6
+  description: Reservas.
+- name: module:integration
+  color: 0366d6
+  description: Integracion.
+- name: module:performance
+  color: 0366d6
+  description: Rendimiento.
+- name: module:ci
+  color: 0366d6
+  description: Integracion continua.
+- name: module:documentation
+  color: 0366d6
+  description: Documentacion.

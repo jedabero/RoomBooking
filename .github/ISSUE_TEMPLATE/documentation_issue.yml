@@ -1,0 +1,65 @@
+name: Documentation issue
+description: Reportar una inconsistencia o mejora documental.
+title: "[Docs]: "
+labels: ["type:documentation", "module:documentation", "status:new"]
+body:
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severidad
+      options:
+        - severity:critical
+        - severity:high
+        - severity:medium
+        - severity:low
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridad
+      options:
+        - priority:p1
+        - priority:p2
+        - priority:p3
+        - priority:p4
+    validations:
+      required: true
+  - type: textarea
+    id: location
+    attributes:
+      label: Ubicacion documental
+      description: Ruta, seccion o enlace afectado.
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Resultado obtenido
+      description: Describir la inconsistencia, omision o error.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidencia
+      description: Captura, enlace, fragmento o referencia.
+    validations:
+      required: true
+  - type: input
+    id: related_test
+    attributes:
+      label: Prueba relacionada
+      placeholder: Opcional
+  - type: textarea
+    id: closure
+    attributes:
+      label: Criterio de cierre
+    validations:
+      required: true
