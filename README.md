@@ -1,6 +1,6 @@
 # RoomBooking — Pruebas Unitarias e Integración
 
-[![CI](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml/badge.svg)](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml)
+[![CI](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml/badge.svg?token=1RWGXAGO74)](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml)
 
 > **Nota Codecov:** la carga de cobertura está configurada en GitHub Actions, pero el badge de Codecov se deja pendiente hasta validar la configuración del repositorio en Codecov.
 
@@ -27,7 +27,7 @@
 - Implementar las pruebas siguiendo el patrón **AAA (Arrange – Act – Assert)**.
 - Definir y documentar **Clases de Equivalencia** y **Valores Límite**.
 - Expresar los comportamientos esperados mediante **BDD (Given – When – Then)**.
-- Documentar todo el proceso en un **Wiki dentro del repositorio**, siguiendo el modelo del *Taller de Pruebas Unitarias*.
+- Documentar todo el proceso en un **Wiki dentro del repositorio**, siguiendo el modelo del _Taller de Pruebas Unitarias_.
 
 ---
 
@@ -98,25 +98,25 @@ La API simulada retorna objetos tipo HTTP con `status` y `body`. Esto permite va
 
 ### Capas integradas
 
-| Capa | Componentes | Responsabilidad |
-|---|---|---|
-| Dominio | `ReservationConflict`, `Availability`, `ReservationPolicy`, `Permission`, `RoomValidation` | Reglas puras de negocio. |
-| Aplicación | `ReservationService`, `RoomService`, `AvailabilityService` | Coordinación de casos de uso. |
-| Infraestructura | `InMemoryRoomRepository`, `InMemoryReservationRepository` | Persistencia simulada para integración. |
-| Delivery | `RoomBookingApi` | API simulada con respuestas tipo HTTP. |
+| Capa            | Componentes                                                                                | Responsabilidad                         |
+| --------------- | ------------------------------------------------------------------------------------------ | --------------------------------------- |
+| Dominio         | `ReservationConflict`, `Availability`, `ReservationPolicy`, `Permission`, `RoomValidation` | Reglas puras de negocio.                |
+| Aplicación      | `ReservationService`, `RoomService`, `AvailabilityService`                                 | Coordinación de casos de uso.           |
+| Infraestructura | `InMemoryRoomRepository`, `InMemoryReservationRepository`                                  | Persistencia simulada para integración. |
+| Delivery        | `RoomBookingApi`                                                                           | API simulada con respuestas tipo HTTP.  |
 
 ### Escenarios cubiertos
 
-| Escenario | Tipo | Archivo |
-|---|---|---|
-| Crear una reserva válida persiste la reserva. | Integración | `test/integration/application/ReservationService.integration.test.ts` |
-| Crear una reserva con conflicto es rechazado. | Integración/Sistema | `test/integration/application/ReservationService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts` |
-| Una reserva consecutiva no se considera conflicto. | Integración | `test/integration/application/ReservationService.integration.test.ts` |
-| Una reserva cancelada no bloquea disponibilidad. | Integración | `test/integration/application/ReservationService.integration.test.ts` |
+| Escenario                                                    | Tipo                | Archivo                                                                                                                           |
+| ------------------------------------------------------------ | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Crear una reserva válida persiste la reserva.                | Integración         | `test/integration/application/ReservationService.integration.test.ts`                                                             |
+| Crear una reserva con conflicto es rechazado.                | Integración/Sistema | `test/integration/application/ReservationService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts`  |
+| Una reserva consecutiva no se considera conflicto.           | Integración         | `test/integration/application/ReservationService.integration.test.ts`                                                             |
+| Una reserva cancelada no bloquea disponibilidad.             | Integración         | `test/integration/application/ReservationService.integration.test.ts`                                                             |
 | Consultar disponibilidad excluye salas ocupadas e inactivas. | Integración/Sistema | `test/integration/application/AvailabilityService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts` |
-| Una sala inactiva no puede reservarse. | Integración | `test/integration/application/ReservationService.integration.test.ts` |
-| Un usuario común no puede ejecutar acciones administrativas. | Integración/Sistema | `test/integration/application/RoomService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts` |
-| Un administrador puede gestionar salas. | Integración/Sistema | `test/integration/application/RoomService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts` |
+| Una sala inactiva no puede reservarse.                       | Integración         | `test/integration/application/ReservationService.integration.test.ts`                                                             |
+| Un usuario común no puede ejecutar acciones administrativas. | Integración/Sistema | `test/integration/application/RoomService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts`         |
+| Un administrador puede gestionar salas.                      | Integración/Sistema | `test/integration/application/RoomService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts`         |
 
 ### Comandos de ejecución
 
@@ -227,13 +227,13 @@ npx vitest run --coverage
 
 ## Métricas de calidad
 
-| Métrica | Requisito mínimo |
-|----------|------------------|
-| **Cobertura global (Vitest + V8/Istanbul)** | ≥ 80% |
-| **Cobertura en paquete de dominio** | ≥ 80% |
-| **Número mínimo de clases de prueba** | 5 |
-| **Estilo de nomenclatura** | `should...When...()` |
-| **Buenas prácticas** | Código limpio, sin duplicaciones, constantes extraídas, nombres expresivos. |
+| Métrica                                     | Requisito mínimo                                                            |
+| ------------------------------------------- | --------------------------------------------------------------------------- |
+| **Cobertura global (Vitest + V8/Istanbul)** | ≥ 80%                                                                       |
+| **Cobertura en paquete de dominio**         | ≥ 80%                                                                       |
+| **Número mínimo de clases de prueba**       | 5                                                                           |
+| **Estilo de nomenclatura**                  | `should...When...()`                                                        |
+| **Buenas prácticas**                        | Código limpio, sin duplicaciones, constantes extraídas, nombres expresivos. |
 
 ---
 
@@ -249,24 +249,24 @@ npx vitest run --coverage
 
 ## Rúbrica de evaluación
 
-| **Criterios de evaluación** | **Indicadores de cumplimiento** | **Excelente (5 pts)** | **Bueno (4 pts)** | **Necesita mejorar (3.5 pts)** | **Deficiente (2.5 pts)** | **No cumple (0 pts)** |
-|------------------------------|---------------------------------|------------------------|--------------------|---------------------------------|---------------------------|------------------------|
-| **Diseño del dominio** | Claridad, coherencia y relevancia del dominio elegido. | Dominio bien definido, con reglas de negocio reales y aplicables. | Dominio comprensible, con reglas básicas bien identificadas. | Dominio poco claro o simplificado en exceso. | No hay correspondencia entre dominio y pruebas. | No se define dominio funcional. |
-| **Estructura y organización del código** | Implementa arquitectura limpia y buenas prácticas. | Estructura ordenada, modular y coherente. | Cumple la mayoría de principios con leves inconsistencias. | Organización parcial o sin separación clara de capas. | Estructura confusa o con dependencias innecesarias. | No presenta estructura funcional. |
-| **Aplicación del ciclo TDD (Red → Green → Refactor)** | Evidencia de desarrollo iterativo basado en pruebas. | Documenta al menos 3 iteraciones claras con resultados. | Se evidencian ciclos parciales o incompletos. | TDD se menciona pero no se demuestra claramente. | Sin evidencia práctica de TDD. | No aplica TDD. |
-| **Patrón AAA (Arrange–Act–Assert)** | Claridad y consistencia en los tests. | Todos los tests aplican AAA correctamente. | Mayoría de los tests con AAA consistente. | Estructura irregular o confusa. | Solo algunos tests aplican AAA. | No se aplica AAA. |
-| **Clases de equivalencia y valores límite** | Definición y aplicación de casos representativos. | Tabla completa y justificada, reflejada en los tests. | Casos correctos pero sin justificación detallada. | Tabla parcial o confusa. | Casos incompletos o erróneos. | No se aplica la técnica. |
-| **Escenarios BDD (Given–When–Then)** | Coherencia entre escenarios narrativos y pruebas. | Escenarios claros, completos y coherentes. | Escenarios bien planteados pero con faltantes menores. | Redacción ambigua o poco estructurada. | Escenarios mal formulados o inconsistentes. | No aplica BDD. |
-| **Cobertura de código (Vitest + V8/Istanbul)** | Porcentaje de código probado. | ≥ 80% global y en dominio. | Entre 70% y 79%. | Entre 60% y 69%. | Menor a 60%. | No presenta cobertura. |
-| **Documentación en Wiki** | Wiki como documento oficial de entrega. | Completo, estructurado y con evidencias claras. | Incluye secciones clave pero sin suficiente detalle. | Incompleto o poco organizado. | Parcial o sin evidencia visual. | No presenta Wiki. |
-| **Reflexión técnica y conclusiones** | Análisis del proceso y aprendizajes. | Reflexión profunda y analítica sobre TDD, AAA y BDD. | Reflexión general con ejemplos. | Comentarios superficiales o incompletos. | Reflexión mínima o incoherente. | Sin reflexión. |
-| **Calidad general y mantenibilidad** | Código, documentación y presentación global. | Excelente claridad, orden y consistencia técnica. | Buen nivel general con leves omisiones. | Correcto pero sin cohesión entre partes. | Deficiente o sin conexión entre código y documentación. | Proyecto incompleto o inejecutable. |
+| **Criterios de evaluación**                           | **Indicadores de cumplimiento**                        | **Excelente (5 pts)**                                             | **Bueno (4 pts)**                                            | **Necesita mejorar (3.5 pts)**                        | **Deficiente (2.5 pts)**                                | **No cumple (0 pts)**               |
+| ----------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------- | ------------------------------------------------------- | ----------------------------------- |
+| **Diseño del dominio**                                | Claridad, coherencia y relevancia del dominio elegido. | Dominio bien definido, con reglas de negocio reales y aplicables. | Dominio comprensible, con reglas básicas bien identificadas. | Dominio poco claro o simplificado en exceso.          | No hay correspondencia entre dominio y pruebas.         | No se define dominio funcional.     |
+| **Estructura y organización del código**              | Implementa arquitectura limpia y buenas prácticas.     | Estructura ordenada, modular y coherente.                         | Cumple la mayoría de principios con leves inconsistencias.   | Organización parcial o sin separación clara de capas. | Estructura confusa o con dependencias innecesarias.     | No presenta estructura funcional.   |
+| **Aplicación del ciclo TDD (Red → Green → Refactor)** | Evidencia de desarrollo iterativo basado en pruebas.   | Documenta al menos 3 iteraciones claras con resultados.           | Se evidencian ciclos parciales o incompletos.                | TDD se menciona pero no se demuestra claramente.      | Sin evidencia práctica de TDD.                          | No aplica TDD.                      |
+| **Patrón AAA (Arrange–Act–Assert)**                   | Claridad y consistencia en los tests.                  | Todos los tests aplican AAA correctamente.                        | Mayoría de los tests con AAA consistente.                    | Estructura irregular o confusa.                       | Solo algunos tests aplican AAA.                         | No se aplica AAA.                   |
+| **Clases de equivalencia y valores límite**           | Definición y aplicación de casos representativos.      | Tabla completa y justificada, reflejada en los tests.             | Casos correctos pero sin justificación detallada.            | Tabla parcial o confusa.                              | Casos incompletos o erróneos.                           | No se aplica la técnica.            |
+| **Escenarios BDD (Given–When–Then)**                  | Coherencia entre escenarios narrativos y pruebas.      | Escenarios claros, completos y coherentes.                        | Escenarios bien planteados pero con faltantes menores.       | Redacción ambigua o poco estructurada.                | Escenarios mal formulados o inconsistentes.             | No aplica BDD.                      |
+| **Cobertura de código (Vitest + V8/Istanbul)**        | Porcentaje de código probado.                          | ≥ 80% global y en dominio.                                        | Entre 70% y 79%.                                             | Entre 60% y 69%.                                      | Menor a 60%.                                            | No presenta cobertura.              |
+| **Documentación en Wiki**                             | Wiki como documento oficial de entrega.                | Completo, estructurado y con evidencias claras.                   | Incluye secciones clave pero sin suficiente detalle.         | Incompleto o poco organizado.                         | Parcial o sin evidencia visual.                         | No presenta Wiki.                   |
+| **Reflexión técnica y conclusiones**                  | Análisis del proceso y aprendizajes.                   | Reflexión profunda y analítica sobre TDD, AAA y BDD.              | Reflexión general con ejemplos.                              | Comentarios superficiales o incompletos.              | Reflexión mínima o incoherente.                         | Sin reflexión.                      |
+| **Calidad general y mantenibilidad**                  | Código, documentación y presentación global.           | Excelente claridad, orden y consistencia técnica.                 | Buen nivel general con leves omisiones.                      | Correcto pero sin cohesión entre partes.              | Deficiente o sin conexión entre código y documentación. | Proyecto incompleto o inejecutable. |
 
-| Rango de puntaje | Desempeño |
+| Rango de puntaje | Desempeño                                                |
 | ---------------- | -------------------------------------------------------- |
-| 45 – 50          | Excelente dominio técnico y metodológico. |
-| 35 – 44          | Buen trabajo con documentación o cobertura parcial. |
-| 30 – 34          | Cumple con lo básico pero sin profundidad. |
+| 45 – 50          | Excelente dominio técnico y metodológico.                |
+| 35 – 44          | Buen trabajo con documentación o cobertura parcial.      |
+| 30 – 34          | Cumple con lo básico pero sin profundidad.               |
 | < 30             | No cumple con los criterios mínimos del taller/proyecto. |
 
 ---
@@ -279,10 +279,10 @@ La documentación detallada del proyecto (TDD, AAA, Clases de Equivalencia, BDD,
 
 ## Referencias
 
-- Myers, G. J., *The Art of Software Testing* (3rd ed.).
-- Koskela, L., *Effective Unit Testing*.
-- Martin, R. C., *Clean Architecture*.
-- Documentación oficial: *Vitest*, *V8*, *BDD Gherkin Syntax*.
+- Myers, G. J., _The Art of Software Testing_ (3rd ed.).
+- Koskela, L., _Effective Unit Testing_.
+- Martin, R. C., _Clean Architecture_.
+- Documentación oficial: _Vitest_, _V8_, _BDD Gherkin Syntax_.
 
 ---
 
@@ -301,11 +301,12 @@ La documentación detallada del proyecto (TDD, AAA, Clases de Equivalencia, BDD,
 **Año:** 2025
 
 **Equipo RoomBooking:**
+
 - Jeison David Berdugo Orejarena
 - Jagler David Velasquez Velasquez
 - Rigo Armando Rosero Castillo
 
-Este taller y su contenido fueron diseñados por el profesor **César Augusto Vega Fernández** como material académico para el curso *Testing y Validación de Software*, impartido en la **Maestría en Ingeniería de Software de la Universidad de La Sabana**.
+Este taller y su contenido fueron diseñados por el profesor **César Augusto Vega Fernández** como material académico para el curso _Testing y Validación de Software_, impartido en la **Maestría en Ingeniería de Software de la Universidad de La Sabana**.
 
 Su propósito es exclusivamente educativo y está orientado a fortalecer las competencias de los estudiantes en **TDD, AAA, Clases de Equivalencia, BDD** y validación de software en contextos de arquitectura limpia.
 
