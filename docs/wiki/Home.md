@@ -2,7 +2,7 @@
 
 **RoomBooking** es el repositorio académico `jedabero/RoomBooking`. **RoomBooker** es el sistema de reserva de salas modelado en este trabajo.
 
-Esta Wiki documenta la actividad de pruebas unitarias de la Unidad 3 para reglas puras de dominio, sin base de datos, HTTP, UI ni frameworks web.
+Esta Wiki documenta las actividades de pruebas unitarias, pruebas de integración y pruebas de sistema/API simulada para RoomBooker.
 
 ## Navegación
 
@@ -13,7 +13,11 @@ Esta Wiki documenta la actividad de pruebas unitarias de la Unidad 3 para reglas
 - [05 — Escenarios BDD](05-Escenarios-BDD)
 - [06 — Cobertura y Resultados](06-Cobertura-y-Resultados)
 - [07 — Matriz de Trazabilidad](07-Matriz-de-Trazabilidad)
-- [08 — Conclusiones](08-Conclusiones)
+- [08 — Pruebas de Integración](08-Pruebas-de-Integracion)
+- [09 — Pruebas de Sistema](09-Pruebas-de-Sistema)
+- [10 — Cobertura y Resultados de Integración](10-Cobertura-y-Resultados-Integracion)
+- [11 — Defectos de Integración](11-Defectos-de-Integracion)
+- [Conclusiones Unitarias](08-Conclusiones)
 
 ## Integrantes
 
@@ -23,4 +27,4 @@ Esta Wiki documenta la actividad de pruebas unitarias de la Unidad 3 para reglas
 
 ## Estado de entrega
 
-El proyecto contiene cinco reglas de dominio probadas con Vitest y cobertura local configurada con V8.
+El proyecto contiene pruebas unitarias de dominio, pruebas de integración entre capas, pruebas de sistema sobre API simulada, cobertura local con V8 y pipeline CI/CD en GitHub Actions.

@@ -1,10 +1,10 @@
-# RoomBooking — Pruebas Unitarias
+# RoomBooking — Pruebas Unitarias e Integración
 
 [![CI](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml/badge.svg)](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml)
 
 > **Nota Codecov:** la carga de cobertura está configurada en GitHub Actions, pero el badge de Codecov se deja pendiente hasta validar la configuración del repositorio en Codecov.
 
-**RoomBooking** es el repositorio académico. **RoomBooker** es el sistema de reserva de salas modelado en este proyecto. El proyecto aplica las estrategias del **Taller de Pruebas Unitarias** para diseñar, implementar y validar reglas puras de dominio mediante **pruebas automatizadas** con TypeScript y Vitest.
+**RoomBooking** es el repositorio académico. **RoomBooker** es el sistema de reserva de salas modelado en este proyecto. El proyecto aplica estrategias de **pruebas unitarias**, **pruebas de integración** y **pruebas de sistema/API simulada** mediante TypeScript y Vitest.
 
 ---
 
@@ -37,11 +37,19 @@
 src/
 ├── domain/
 │   ├── model/           # Entidades y Value Objects (Room, Reservation, TimeRange, etc.)
-│   ├── rules/           # Reglas de negocio (ReservationConflict, Availability, etc.)
-│   └── exception/       # Excepciones de dominio
+│   └── rules/           # Reglas de negocio (ReservationConflict, Availability, etc.)
+├── application/
+│   └── services/        # Servicios de aplicación que coordinan reglas y repositorios
+├── infrastructure/
+│   └── persistence/     # Repositorios in-memory e interfaces
+└── delivery/
+    └── http/            # API simulada sin servidor HTTP real
 test/
-└── domain/
-    └── rules/           # Pruebas unitarias del dominio
+├── domain/
+│   └── rules/           # Pruebas unitarias del dominio
+└── integration/
+    ├── application/     # Pruebas de integración entre servicios, repositorios y dominio
+    └── delivery/        # Pruebas de sistema/API simulada
 ```
 
 ---
@@ -55,11 +63,105 @@ npm install
 # Ejecutar pruebas
 npx vitest run
 
+# Ejecutar pruebas unitarias
+npm run test:unit
+
+# Ejecutar pruebas de integración
+npm run test:integration
+
+# Ejecutar pruebas de sistema/API simulada
+npm run test:system
+
 # Reporte de cobertura
 npx vitest run --coverage
 ```
 
 Las pruebas deben ejecutarse **de manera automática** sin pasos adicionales.
+
+---
+
+## Pruebas de Integración y Sistema
+
+### Objetivo
+
+Validar que las capas principales de RoomBooker colaboran correctamente sin depender de una base de datos real ni de un servidor HTTP real. Las pruebas complementan la suite unitaria previa y verifican flujos completos de reserva, disponibilidad, permisos y administración de salas.
+
+### Arquitectura bajo prueba
+
+La arquitectura probada integra estas capas:
+
+```text
+delivery/API simulada -> application service -> repository in-memory -> domain rules
+```
+
+La API simulada retorna objetos tipo HTTP con `status` y `body`. Esto permite validar estados como `200`, `201`, `400`, `403`, `404` y `409` sin introducir frameworks web innecesarios.
+
+### Capas integradas
+
+| Capa | Componentes | Responsabilidad |
+|---|---|---|
+| Dominio | `ReservationConflict`, `Availability`, `ReservationPolicy`, `Permission`, `RoomValidation` | Reglas puras de negocio. |
+| Aplicación | `ReservationService`, `RoomService`, `AvailabilityService` | Coordinación de casos de uso. |
+| Infraestructura | `InMemoryRoomRepository`, `InMemoryReservationRepository` | Persistencia simulada para integración. |
+| Delivery | `RoomBookingApi` | API simulada con respuestas tipo HTTP. |
+
+### Escenarios cubiertos
+
+| Escenario | Tipo | Archivo |
+|---|---|---|
+| Crear una reserva válida persiste la reserva. | Integración | `test/integration/application/ReservationService.integration.test.ts` |
+| Crear una reserva con conflicto es rechazado. | Integración/Sistema | `test/integration/application/ReservationService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts` |
+| Una reserva consecutiva no se considera conflicto. | Integración | `test/integration/application/ReservationService.integration.test.ts` |
+| Una reserva cancelada no bloquea disponibilidad. | Integración | `test/integration/application/ReservationService.integration.test.ts` |
+| Consultar disponibilidad excluye salas ocupadas e inactivas. | Integración/Sistema | `test/integration/application/AvailabilityService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts` |
+| Una sala inactiva no puede reservarse. | Integración | `test/integration/application/ReservationService.integration.test.ts` |
+| Un usuario común no puede ejecutar acciones administrativas. | Integración/Sistema | `test/integration/application/RoomService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts` |
+| Un administrador puede gestionar salas. | Integración/Sistema | `test/integration/application/RoomService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts` |
+
+### Comandos de ejecución
+
+```bash
+npm ci
+npm run typecheck
+npm run test:unit
+npm run test:integration
+npm run test:system
+npm run test:coverage
+```
+
+### Cobertura
+
+La cobertura se genera con Vitest y V8 sobre:
+
+```text
+src/domain/**
+src/application/**
+src/infrastructure/**
+src/delivery/**
+```
+
+Resultado local de referencia:
+
+```text
+Statements   : 99.33% (150/151)
+Branches     : 97.5% (78/80)
+Functions    : 100% (46/46)
+Lines        : 99.3% (142/143)
+```
+
+### CI/CD
+
+El workflow `.github/workflows/ci.yml` se ejecuta en `push` y `pull_request` hacia `main`. El pipeline instala dependencias con `npm ci`, ejecuta typecheck, pruebas unitarias, integración, sistema y cobertura. También publica el directorio `coverage/` como artifact y envía cobertura a Codecov si el repositorio está configurado.
+
+### Restricción de integración
+
+Para usar el pipeline como restricción antes de integrar cambios en `main`, configurar branch protection en GitHub:
+
+1. Ir a `Settings` -> `Branches`.
+2. Crear o editar una regla para `main`.
+3. Activar `Require status checks to pass before merging`.
+4. Seleccionar el workflow/check `CI`.
+5. Activar `Require branches to be up to date before merging` si se desea exigir actualización previa.
 
 ---
 
