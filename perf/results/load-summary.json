@@ -1,0 +1,178 @@
+{
+    "metrics": {
+        "http_req_connecting": {
+            "med": 0,
+            "max": 0.82427,
+            "p(90)": 0,
+            "p(95)": 0,
+            "p(99)": 0,
+            "avg": 0.001487056512288915,
+            "min": 0
+        },
+        "http_req_tls_handshaking": {
+            "p(99)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_sending": {
+            "med": 0.0183,
+            "max": 2.637635,
+            "p(90)": 0.052174,
+            "p(95)": 0.061686,
+            "p(99)": 0.13787119999999964,
+            "avg": 0.028581476843337283,
+            "min": 0.004223
+        },
+        "http_req_waiting": {
+            "avg": 0.6100871004848671,
+            "min": 0.114899,
+            "med": 0.382017,
+            "max": 27.203461,
+            "p(90)": 0.758453,
+            "p(95)": 1.44263,
+            "p(99)": 6.206498799999993
+        },
+        "vus_max": {
+            "value": 30,
+            "min": 30,
+            "max": 30
+        },
+        "http_req_receiving": {
+            "max": 8.269839,
+            "p(90)": 0.122522,
+            "p(95)": 0.149817,
+            "p(99)": 0.38575459999999784,
+            "avg": 0.09194500083598045,
+            "min": 0.011719,
+            "med": 0.072128
+        },
+        "data_received": {
+            "count": 2122614,
+            "rate": 17595.69645728772
+        },
+        "iteration_duration": {
+            "p(95)": 1010.4612115,
+            "p(99)": 1021.0672195399999,
+            "avg": 1003.946995493005,
+            "min": 1001.232273,
+            "med": 1002.935806,
+            "max": 1047.824781,
+            "p(90)": 1006.072032
+        },
+        "http_req_duration": {
+            "p(95)": 1.737485,
+            "p(99)": 6.784671799999985,
+            "avg": 0.7306135781641847,
+            "min": 0.151309,
+            "med": 0.493731,
+            "max": 27.442213,
+            "p(90)": 0.9221,
+            "thresholds": {
+                "p(95)<500": false
+            }
+        },
+        "unexpected_errors": {
+            "passes": 0,
+            "fails": 5980,
+            "thresholds": {
+                "rate<0.01": false
+            },
+            "value": 0
+        },
+        "http_reqs": {
+            "count": 5981,
+            "rate": 49.58031017935331
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 5981,
+            "thresholds": {
+                "rate<0.02": false
+            },
+            "value": 0
+        },
+        "checks": {
+            "fails": 0,
+            "passes": 7767,
+            "value": 1
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 0.7306135781641847,
+            "min": 0.151309,
+            "med": 0.493731,
+            "max": 27.442213,
+            "p(90)": 0.9221,
+            "p(95)": 1.737485,
+            "p(99)": 6.784671799999985
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 30
+        },
+        "iterations": {
+            "count": 1787,
+            "rate": 14.813578714346157
+        },
+        "http_req_blocked": {
+            "p(90)": 0.009313,
+            "p(95)": 0.010982,
+            "p(99)": 0.05837859999999949,
+            "avg": 0.010111896505601098,
+            "min": 0.001327,
+            "med": 0.004341,
+            "max": 9.48698
+        },
+        "data_sent": {
+            "count": 1191821,
+            "rate": 9879.761721830302
+        }
+    },
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "health status is 200": {
+                    "id": "ab698ad652ee317628077e42e47eda00",
+                    "passes": 1787,
+                    "fails": 0,
+                    "name": "health status is 200",
+                    "path": "::health status is 200"
+                },
+                "availability status is 200": {
+                    "id": "905421068fbc26b3264dea73d229545f",
+                    "passes": 1787,
+                    "fails": 0,
+                    "name": "availability status is 200",
+                    "path": "::availability status is 200"
+                },
+                "availability returns rooms": {
+                    "fails": 0,
+                    "name": "availability returns rooms",
+                    "path": "::availability returns rooms",
+                    "id": "948a676279981d0cbda921e86450762c",
+                    "passes": 1787
+                },
+                "reservation status is 201 or expected conflict": {
+                    "name": "reservation status is 201 or expected conflict",
+                    "path": "::reservation status is 201 or expected conflict",
+                    "id": "853d956bcc6b8cf77ff5a9521a1133fc",
+                    "passes": 1787,
+                    "fails": 0
+                },
+                "cancel status is 200 or 204": {
+                    "path": "::cancel status is 200 or 204",
+                    "id": "2cdd30796f4aa6aab790486c349759ba",
+                    "passes": 619,
+                    "fails": 0,
+                    "name": "cancel status is 200 or 204"
+                }
+            }
+    }
+}

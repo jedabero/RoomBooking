@@ -1,0 +1,8 @@
+[
+  { "id": "room-1", "name": "Sala Andromeda", "capacity": 4, "location": "Piso 1" },
+  { "id": "room-2", "name": "Sala Boreal", "capacity": 6, "location": "Piso 1" },
+  { "id": "room-3", "name": "Sala Centauri", "capacity": 8, "location": "Piso 2" },
+  { "id": "room-4", "name": "Sala Draco", "capacity": 10, "location": "Piso 2" },
+  { "id": "room-5", "name": "Sala Equinox", "capacity": 12, "location": "Piso 3" },
+  { "id": "room-6", "name": "Sala Fenix", "capacity": 16, "location": "Piso 3" }
+]

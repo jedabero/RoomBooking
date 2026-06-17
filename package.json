@@ -13,11 +13,19 @@
     "test:system": "vitest run test/integration/delivery",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "perf:serve": "tsx src/delivery/http/PerformanceServer.ts",
+    "perf:baseline": "k6 run perf/scripts/room_booking_k6.js -e SCENARIO=baseline --summary-export=perf/results/baseline-summary.json",
+    "perf:load": "k6 run perf/scripts/room_booking_k6.js -e SCENARIO=load --summary-export=perf/results/load-summary.json",
+    "perf:stress": "k6 run perf/scripts/room_booking_k6.js -e SCENARIO=stress --summary-export=perf/results/stress-summary.json",
+    "perf:spike": "k6 run perf/scripts/room_booking_k6.js -e SCENARIO=spike --summary-export=perf/results/spike-summary.json",
+    "perf:soak": "k6 run perf/scripts/room_booking_k6.js -e SCENARIO=soak --summary-export=perf/results/soak-summary.json",
+    "perf:regression": "k6 run perf/scripts/room_booking_k6.js -e SCENARIO=regression --summary-export=perf/results/regression-summary.json"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
     "@vitest/coverage-v8": "^4.1.8",
+    "tsx": "^4.20.0",
     "typescript": "^5.5.0",
     "vitest": "^4.1.0"
   }

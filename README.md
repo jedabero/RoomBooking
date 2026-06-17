@@ -1,10 +1,10 @@
-# RoomBooking — Pruebas Unitarias e Integración
+# RoomBooking — Pruebas Unitarias, Integración y Rendimiento
 
-[![CI](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml/badge.svg?token=1RWGXAGO74)](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml)
+[![CI](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml/badge.svg)](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml)
 
 > **Nota Codecov:** la carga de cobertura está configurada en GitHub Actions, pero el badge de Codecov se deja pendiente hasta validar la configuración del repositorio en Codecov.
 
-**RoomBooking** es el repositorio académico. **RoomBooker** es el sistema de reserva de salas modelado en este proyecto. El proyecto aplica estrategias de **pruebas unitarias**, **pruebas de integración** y **pruebas de sistema/API simulada** mediante TypeScript y Vitest.
+**RoomBooking** es el repositorio académico. **RoomBooker** es el sistema de reserva de salas modelado en este proyecto. El proyecto aplica estrategias de **pruebas unitarias**, **pruebas de integración**, **pruebas de sistema/API simulada** y **pruebas de carga/rendimiento** mediante TypeScript, Vitest y k6.
 
 ---
 
@@ -43,13 +43,18 @@ src/
 ├── infrastructure/
 │   └── persistence/     # Repositorios in-memory e interfaces
 └── delivery/
-    └── http/            # API simulada sin servidor HTTP real
+    └── http/            # API simulada y servidor REST local para performance
 test/
 ├── domain/
 │   └── rules/           # Pruebas unitarias del dominio
 └── integration/
     ├── application/     # Pruebas de integración entre servicios, repositorios y dominio
     └── delivery/        # Pruebas de sistema/API simulada
+perf/
+├── scripts/             # Scripts k6 parametrizados
+├── data/                # Datos de prueba
+├── results/             # Resultados exportados por k6
+└── reports/             # Reportes técnicos y SLO
 ```
 
 ---
@@ -162,6 +167,71 @@ Para usar el pipeline como restricción antes de integrar cambios en `main`, con
 3. Activar `Require status checks to pass before merging`.
 4. Seleccionar el workflow/check `CI`.
 5. Activar `Require branches to be up to date before merging` si se desea exigir actualización previa.
+
+---
+
+## Pruebas de carga y rendimiento
+
+### Herramienta
+
+k6.
+
+### Servicio local
+
+El servicio REST local usa `node:http` nativo y reutiliza servicios, repositorios in-memory y reglas de dominio existentes.
+
+```bash
+npm run perf:serve
+```
+
+Endpoints disponibles:
+
+- `GET /health`
+- `POST /api/availability`
+- `POST /api/reservations`
+- `PATCH /api/reservations/:id/cancel`
+- `POST /api/test/reset`
+
+### Ejecución de escenarios
+
+En otra terminal, con el servicio activo:
+
+```bash
+npm run perf:baseline
+npm run perf:load
+npm run perf:stress
+npm run perf:spike
+npm run perf:soak
+npm run perf:regression
+```
+
+También se puede ejecutar directamente con k6:
+
+```bash
+k6 run perf/scripts/room_booking_k6.js -e SCENARIO=baseline -e BASE_URL=http://localhost:3000
+```
+
+Alternativa con Docker en Linux:
+
+```bash
+docker run --rm --network host -i grafana/k6 run -e BASE_URL=http://localhost:3000 -e SCENARIO=baseline - < perf/scripts/room_booking_k6.js
+```
+
+### Resultados
+
+Los resultados se almacenan en `perf/results/` mediante `--summary-export`.
+
+### Reporte
+
+Ver `perf/reports/performance-report.md` y `perf/reports/slo.md`.
+
+### Wiki
+
+La documentación oficial se encuentra en `docs/wiki/`, páginas `13` a `16`.
+
+### CI manual
+
+El workflow `.github/workflows/performance.yml` se ejecuta manualmente con `workflow_dispatch` y corre únicamente la regresión de rendimiento para evitar costos e inestabilidad de escenarios largos.
 
 ---
 

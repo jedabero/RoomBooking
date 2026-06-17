@@ -1,0 +1,7 @@
+[
+  { "id": "user-1", "role": "USER" },
+  { "id": "user-2", "role": "USER" },
+  { "id": "user-3", "role": "USER" },
+  { "id": "manager-1", "role": "MANAGER" },
+  { "id": "admin-1", "role": "ADMIN" }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "id": "seed-reservation-1",
+    "roomId": "room-1",
+    "userId": "seed-user-1",
+    "description": "Reserva semilla generada dinamicamente por el servidor de performance con fecha futura."
+  }
+]

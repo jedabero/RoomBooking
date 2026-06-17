@@ -2,7 +2,7 @@
 
 **RoomBooking** es el repositorio académico `jedabero/RoomBooking`. **RoomBooker** es el sistema de reserva de salas modelado en este trabajo.
 
-Esta Wiki documenta las actividades de pruebas unitarias, pruebas de integración y pruebas de sistema/API simulada para RoomBooker.
+Esta Wiki documenta las actividades de pruebas unitarias, pruebas de integración, pruebas de sistema/API simulada y pruebas de carga/rendimiento para RoomBooker.
 
 ## Navegación
 
@@ -17,6 +17,11 @@ Esta Wiki documenta las actividades de pruebas unitarias, pruebas de integració
 - [09 — Pruebas de Sistema](09-Pruebas-de-Sistema)
 - [10 — Cobertura y Resultados de Integración](10-Cobertura-y-Resultados-Integracion)
 - [11 — Defectos de Integración](11-Defectos-de-Integracion)
+- [12 — Conclusiones de Integración](12-Conclusiones-Integracion)
+- [13 — Pruebas de Carga y Rendimiento](13-Pruebas-de-Carga-y-Rendimiento)
+- [14 — SLO y Escenarios de Rendimiento](14-SLO-y-Escenarios-de-Rendimiento)
+- [15 — Resultados y Análisis de Rendimiento](15-Resultados-y-Analisis-de-Rendimiento)
+- [16 — Defectos de Rendimiento y Mejoras](16-Defectos-de-Rendimiento-y-Mejoras)
 - [Conclusiones Unitarias](08-Conclusiones)
 
 ## Integrantes
@@ -27,4 +32,4 @@ Esta Wiki documenta las actividades de pruebas unitarias, pruebas de integració
 
 ## Estado de entrega
 
-El proyecto contiene pruebas unitarias de dominio, pruebas de integración entre capas, pruebas de sistema sobre API simulada, cobertura local con V8 y pipeline CI/CD en GitHub Actions.
+El proyecto contiene pruebas unitarias de dominio, pruebas de integración entre capas, pruebas de sistema sobre API simulada, cobertura local con V8, pipeline CI/CD en GitHub Actions y estructura reproducible para pruebas de carga/rendimiento con k6.
