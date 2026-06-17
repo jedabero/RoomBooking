@@ -6,14 +6,24 @@ const MAX_ADVANCE_MS = 30 * 24 * ONE_HOUR_MS
 
 export class ReservationPolicy {
   validate(_roomId: string, timeRange: TimeRange): boolean {
-    const now = new Date()
-    const durationMs = timeRange.end.getTime() - timeRange.start.getTime()
-    const advanceMs = timeRange.start.getTime() - now.getTime()
+    return (
+      this.hasValidDuration(timeRange) &&
+      this.isInFuture(timeRange) &&
+      this.isWithinAdvanceLimit(timeRange)
+    )
+  }
 
-    if (durationMs <= 0) return false
-    if (durationMs > MAX_DURATION_MS) return false
-    if (advanceMs < 0) return false
-    if (advanceMs > MAX_ADVANCE_MS) return false
-    return true
+  private hasValidDuration(timeRange: TimeRange): boolean {
+    const durationMs = timeRange.end.getTime() - timeRange.start.getTime()
+    return durationMs > 0 && durationMs <= MAX_DURATION_MS
+  }
+
+  private isInFuture(timeRange: TimeRange): boolean {
+    return timeRange.start.getTime() > Date.now()
+  }
+
+  private isWithinAdvanceLimit(timeRange: TimeRange): boolean {
+    const advanceMs = timeRange.start.getTime() - Date.now()
+    return advanceMs <= MAX_ADVANCE_MS
   }
 }
