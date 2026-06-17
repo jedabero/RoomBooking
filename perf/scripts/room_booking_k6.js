@@ -5,6 +5,7 @@ import { Rate } from 'k6/metrics'
 const scenarioName = __ENV.SCENARIO || 'baseline'
 const baseUrl = __ENV.BASE_URL || 'http://localhost:3000'
 const unexpectedErrors = new Rate('unexpected_errors')
+const reservationConflicts = new Rate('reservation_conflicts')
 
 export const options = buildOptions(scenarioName)
 
@@ -50,6 +51,7 @@ export default function () {
   const reservationOk = check(reservation, {
     'reservation status is 201 or expected conflict': (response) => response.status === 201 || response.status === 409,
   })
+  reservationConflicts.add(reservation.status === 409)
   unexpectedErrors.add(!reservationOk)
 
   if (reservation.status === 201 && (__ITER + __VU) % 2 === 0) {

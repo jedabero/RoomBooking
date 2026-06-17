@@ -25,6 +25,7 @@ npm run perf:serve
 | Endpoint | Método | Propósito |
 |---|---|---|
 | `/health` | GET | Verificar salud del servicio. |
+| `/metrics` | GET | Exponer métricas básicas del proceso para diagnóstico local. |
 | `/api/availability` | POST | Consultar salas disponibles por horario y capacidad. |
 | `/api/reservations` | POST | Crear reservas validando disponibilidad y conflictos. |
 | `/api/reservations/:id/cancel` | PATCH | Cancelar reservas existentes. |
@@ -39,6 +40,17 @@ Los datos semilla están definidos en `perf/data/` y reflejados en el servidor R
 - `perf/data/reservations.json`
 
 Las reservas creadas por k6 usan identificadores y franjas horarias únicas por VU/iteración para reducir conflictos artificiales.
+
+## Observabilidad básica
+
+El servidor local expone `GET /metrics` con métricas simples del proceso Node.js:
+
+- `uptimeSeconds`.
+- Memoria del proceso (`rss`, `heapTotal`, `heapUsed`, `external`).
+- Cantidad de salas cargadas.
+- Cantidad de reservas en memoria.
+
+Estas métricas permiten diagnóstico básico durante ejecuciones locales. No reemplazan una solución productiva de observabilidad.
 
 ## 6. SLO definidos
 
@@ -119,14 +131,37 @@ npm run perf:regression
 
 Se ejecutaron localmente los seis escenarios definidos. Todos aprobaron sus thresholds de k6 y generaron archivos JSON en `perf/results/`.
 
-| Escenario | Archivo | Estado | p95 | p99 | Error rate | Throughput | Iteraciones |
-|---|---|---|---:|---:|---:|---:|---:|
-| Baseline | `perf/results/baseline-summary.json` | Aprobado | `0.83 ms` | `0.97 ms` | `0%` | `10.48 req/s` | `90` |
-| Load | `perf/results/load-summary.json` | Aprobado | `1.74 ms` | `6.78 ms` | `0%` | `49.58 req/s` | `1787` |
-| Stress | `perf/results/stress-summary.json` | Aprobado | `0.76 ms` | `1.01 ms` | `0%` | `101.66 req/s` | `3828` |
-| Spike | `perf/results/spike-summary.json` | Aprobado | `1.06 ms` | `1.55 ms` | `0%` | `134.68 req/s` | `3164` |
-| Soak | `perf/results/soak-summary.json` | Aprobado | `1.71 ms` | `2.48 ms` | `0%` | `65.55 req/s` | `4800` |
-| Regresión | `perf/results/regression-summary.json` | Aprobado | `0.93 ms` | `1.20 ms` | `0%` | `17.42 req/s` | `225` |
+| Escenario | Archivo JSON | Estado | p95 | p99 | Error rate | Throughput | Iteraciones | Conflictos `409` |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| Baseline | `perf/results/baseline-summary.json` | Aprobado | `0.79 ms` | `0.93 ms` | `0%` | `10.31 req/s` | `90` | `0%` |
+| Load | `perf/results/load-summary.json` | Aprobado | `0.60 ms` | `0.76 ms` | `0%` | `49.20 req/s` | `1788` | `34.51%` |
+| Stress | `perf/results/stress-summary.json` | Aprobado | `0.74 ms` | `1.13 ms` | `0%` | `99.81 req/s` | `3828` | `57.94%` |
+| Spike | `perf/results/spike-summary.json` | Aprobado | `0.90 ms` | `1.35 ms` | `0%` | `132.33 req/s` | `3164` | `40.68%` |
+| Soak | `perf/results/soak-summary.json` | Aprobado | `1.43 ms` | `2.05 ms` | `0%` | `64.14 req/s` | `4800` | `58.73%` |
+| Regresión | `perf/results/regression-summary.json` | Aprobado | `0.85 ms` | `1.07 ms` | `0%` | `17.19 req/s` | `225` | `0%` |
+
+La métrica `reservation_conflicts` mide respuestas `409` por conflicto funcional de reserva. Estos conflictos no se contabilizan como error técnico cuando son respuestas esperadas de negocio bajo concurrencia.
+
+## Evidencia de ejecución
+
+Las evidencias técnicas se encuentran en:
+
+- `perf/results/*-summary.json`: resultados exportados por k6.
+- `perf/reports/performance-report.md`: análisis consolidado.
+- `perf/reports/slo.md`: SLO y criterios de aceptación.
+- `.github/workflows/performance.yml`: regresión de rendimiento ejecutable desde GitHub Actions.
+- Run manual ejecutado exitosamente con GitHub CLI: `https://github.com/jedabero/RoomBooking/actions/runs/27699539411`.
+
+Para consultar el estado del run manual:
+
+```bash
+gh run watch 27699539411
+gh run view 27699539411 --web
+```
+
+## Limitaciones de la medición
+
+Las pruebas se ejecutan sobre un servidor local con repositorios in-memory. Por tanto, los resultados no representan rendimiento productivo con base de datos real, red externa, autenticación real ni infraestructura distribuida.
 
 ## 9. Comparación entre escenarios
 
@@ -134,11 +169,12 @@ Baseline y regresión operan con baja carga constante, load incrementa progresiv
 
 ## 10. Análisis de métricas
 
-- Latencia promedio: baseline `0.47 ms`, load `0.73 ms`, stress `0.49 ms`, spike `0.51 ms`, soak `0.72 ms`, regresión `0.51 ms`.
-- p95: baseline `0.83 ms`, load `1.74 ms`, stress `0.76 ms`, spike `1.06 ms`, soak `1.71 ms`, regresión `0.93 ms`.
-- p99: baseline `0.97 ms`, load `6.78 ms`, stress `1.01 ms`, spike `1.55 ms`, soak `2.48 ms`, regresión `1.20 ms`.
-- Throughput: baseline `10.48 req/s`, load `49.58 req/s`, stress `101.66 req/s`, spike `134.68 req/s`, soak `65.55 req/s`, regresión `17.42 req/s`.
+- Latencia promedio: baseline `0.44 ms`, load `0.41 ms`, stress `0.50 ms`, spike `0.44 ms`, soak `0.65 ms`, regresión `0.47 ms`.
+- p95: baseline `0.79 ms`, load `0.60 ms`, stress `0.74 ms`, spike `0.90 ms`, soak `1.43 ms`, regresión `0.85 ms`.
+- p99: baseline `0.93 ms`, load `0.76 ms`, stress `1.13 ms`, spike `1.35 ms`, soak `2.05 ms`, regresión `1.07 ms`.
+- Throughput: baseline `10.31 req/s`, load `49.20 req/s`, stress `99.81 req/s`, spike `132.33 req/s`, soak `64.14 req/s`, regresión `17.19 req/s`.
 - Tasa de errores: `0%` en todos los escenarios ejecutados.
+- Conflictos funcionales `409`: se presentaron en load, stress, spike y soak como efecto esperado de concurrencia, sin convertirse en errores técnicos.
 
 ## 11. Identificación de cuellos de botella
 
@@ -147,7 +183,7 @@ Riesgos técnicos observados para fases futuras:
 - La consulta de disponibilidad recorre reservas en memoria y puede crecer linealmente con el volumen de reservas.
 - La validación de conflictos consulta reservas por sala y puede degradarse si aumenta el historial.
 - El servidor local usa un único proceso Node.js y no representa escalamiento horizontal.
-- No hay métricas de CPU/memoria integradas en el servidor.
+- La observabilidad actual expone memoria y conteos por `/metrics`, pero no incluye CPU, event loop lag ni trazas distribuidas.
 
 ## 12. Defectos de rendimiento
 
@@ -156,7 +192,7 @@ El registro se encuentra en `perf/defectos_rendimiento.md`. No se confirmaron de
 ## 13. Propuestas de mejora
 
 - Indexar reservas por sala y fecha si el volumen crece.
-- Agregar métricas de CPU, memoria y event loop lag.
+- Ampliar `/metrics` con CPU, event loop lag e histogramas por endpoint.
 - Persistir datos en una base real para pruebas de soak representativas.
 - Separar datasets de carga por escenario.
 - Ejecutar regresión de rendimiento en workflow manual antes de entregas.

@@ -21,6 +21,7 @@ npm run perf:serve
 | Endpoint | Método | Propósito |
 |---|---|---|
 | `/health` | GET | Verificar salud del servicio. |
+| `/metrics` | GET | Consultar observabilidad básica del proceso local. |
 | `/api/availability` | POST | Consultar disponibilidad por horario y capacidad. |
 | `/api/reservations` | POST | Crear reservas validando reglas de dominio. |
 | `/api/reservations/:id/cancel` | PATCH | Cancelar reservas existentes. |
@@ -35,6 +36,10 @@ Los datos base se encuentran en:
 - `perf/data/reservations.json`
 
 El endpoint `/api/test/reset` existe solo para ambiente local y pruebas de performance. No representa una funcionalidad productiva.
+
+## Observabilidad básica
+
+El endpoint `/metrics` expone `uptimeSeconds`, memoria del proceso Node.js y conteos de salas y reservas. Esta información permite diagnóstico local mínimo durante pruebas de rendimiento, sin agregar dependencias ni Prometheus.
 
 ## Herramienta
 

@@ -73,6 +73,21 @@ const server = createServer(async (request, response) => {
       })
     }
 
+    if (request.method === 'GET' && url.pathname === '/metrics') {
+      const memory = process.memoryUsage()
+      return sendJson(response, 200, {
+        uptimeSeconds: process.uptime(),
+        memory: {
+          rss: memory.rss,
+          heapTotal: memory.heapTotal,
+          heapUsed: memory.heapUsed,
+          external: memory.external,
+        },
+        rooms: runtime.rooms.findAll().length,
+        reservations: runtime.reservations.findAll().length,
+      })
+    }
+
     if (request.method === 'POST' && url.pathname === '/api/test/reset') {
       runtime = createRuntime()
       return sendJson(response, 200, { status: 'reset' })

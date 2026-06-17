@@ -187,10 +187,13 @@ npm run perf:serve
 Endpoints disponibles:
 
 - `GET /health`
+- `GET /metrics`
 - `POST /api/availability`
 - `POST /api/reservations`
 - `PATCH /api/reservations/:id/cancel`
 - `POST /api/test/reset`
+
+El endpoint `/metrics` expone observabilidad básica del proceso local: uptime, memoria, cantidad de salas y cantidad de reservas en memoria.
 
 ### Ejecución de escenarios
 
@@ -227,7 +230,17 @@ Ver `perf/reports/performance-report.md` y `perf/reports/slo.md`.
 
 ### Wiki
 
-La documentación oficial se encuentra en `docs/wiki/`, páginas `13` a `16`.
+La documentación oficial se encuentra en `docs/wiki/`, páginas `13` a `16`. La guía para publicar la Wiki real de GitHub está en `docs/wiki/PUBLICACION-WIKI.md`.
+
+Si el repositorio Wiki ya está clonado como carpeta hermana `../RoomBooking.wiki`, se puede sincronizar la documentación local con:
+
+```bash
+scripts/sync-wiki.sh
+```
+
+El script solo copia archivos y muestra `git status`; no hace commit ni push.
+
+Para la entrega académica se recomienda adjuntar evidencia visual en la Wiki real: ejecución local de k6, archivos JSON generados en `perf/results/` y ejecución del workflow manual `Performance`.
 
 ### CI manual
 
