@@ -124,4 +124,98 @@ describe('RoomBookingApi system test', () => {
     // Assert / Then
     expect(response).toEqual({ status: 400, body: { error: 'INVALID_RESERVATION' } })
   })
+
+  it('shouldReturn400WhenRoomPayloadIsInvalid', () => {
+    // Arrange / Given
+    const api = setupApi()
+
+    // Act / When
+    const response = api.postRoom({ id: '', name: 'Sala Principal', capacity: 10, actorRole: UserRole.ADMIN })
+
+    // Assert / Then
+    expect(response).toEqual({ status: 400, body: { error: 'INVALID_ROOM' } })
+  })
+
+  it('shouldReturn200WhenRoomIsDeactivated', () => {
+    // Arrange / Given
+    const api = setupApi()
+    api.postRoom({ id: 'room-1', name: 'Sala Principal', capacity: 10, actorRole: UserRole.ADMIN })
+
+    // Act / When
+    const response = api.deactivateRoom('room-1', UserRole.ADMIN)
+
+    // Assert / Then
+    expect(response.status).toBe(200)
+    expect(response.body).toEqual(expect.objectContaining({ active: false }))
+  })
+
+  it('shouldReturn403WhenUserDeactivatesRoom', () => {
+    // Arrange / Given
+    const api = setupApi()
+
+    // Act / When
+    const response = api.deactivateRoom('room-1', UserRole.USER)
+
+    // Assert / Then
+    expect(response).toEqual({ status: 403, body: { error: 'UNAUTHORIZED' } })
+  })
+
+  it('shouldReturn404WhenDeactivatedRoomDoesNotExist', () => {
+    // Arrange / Given
+    const api = setupApi()
+
+    // Act / When
+    const response = api.deactivateRoom('room-1', UserRole.ADMIN)
+
+    // Assert / Then
+    expect(response).toEqual({ status: 404, body: { error: 'ROOM_NOT_FOUND' } })
+  })
+
+  it('shouldReturn403WhenActorCannotCreateReservations', () => {
+    // Arrange / Given
+    const api = setupApi()
+    api.postRoom({ id: 'room-1', name: 'Sala Principal', capacity: 10, actorRole: UserRole.ADMIN })
+
+    // Act / When
+    const response = api.postReservation({
+      id: 'reservation-1',
+      roomId: 'room-1',
+      userId: 'user-1',
+      start: '2026-01-01T09:00:00',
+      end: '2026-01-01T10:00:00',
+      actorRole: UserRole.MANAGER,
+    })
+
+    // Assert / Then
+    expect(response).toEqual({ status: 403, body: { error: 'UNAUTHORIZED' } })
+  })
+
+  it('shouldReturn404WhenReservationRoomDoesNotExist', () => {
+    // Arrange / Given
+    const api = setupApi()
+
+    // Act / When
+    const response = api.postReservation({
+      id: 'reservation-1',
+      roomId: 'missing-room',
+      userId: 'user-1',
+      start: '2026-01-01T09:00:00',
+      end: '2026-01-01T10:00:00',
+      actorRole: UserRole.USER,
+    })
+
+    // Assert / Then
+    expect(response).toEqual({ status: 404, body: { error: 'ROOM_NOT_FOUND' } })
+  })
+
+  it('shouldReturn400WhenAvailabilityDatesAreInvalid', () => {
+    // Arrange / Given
+    const api = setupApi()
+
+    // Act / When
+    const response = api.getAvailability({ start: 'invalid-date', end: '2026-01-01T10:00:00' })
+
+    // Assert / Then
+    expect(response).toEqual({ status: 400, body: { error: 'INVALID_TIME_RANGE' } })
+  })
 })

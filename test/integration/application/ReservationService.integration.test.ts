@@ -167,4 +167,77 @@ describe('ReservationService integration', () => {
     // Assert / Then
     expect(result).toEqual({ ok: false, error: 'ROOM_INACTIVE' })
   })
+
+  it('shouldRejectReservationWhenActorCannotCreateReservations', () => {
+    // Arrange / Given
+    const { service } = setup()
+
+    // Act / When
+    const result = service.createReservation({
+      id: 'reservation-1',
+      roomId: 'room-1',
+      userId: 'user-1',
+      timeRange: makeFutureRange('09:00', '10:00'),
+      actorRole: UserRole.MANAGER,
+    })
+
+    // Assert / Then
+    expect(result).toEqual({ ok: false, error: 'UNAUTHORIZED' })
+  })
+
+  it('shouldRejectReservationWhenRoomDoesNotExist', () => {
+    // Arrange / Given
+    const { service } = setup()
+
+    // Act / When
+    const result = service.createReservation({
+      id: 'reservation-1',
+      roomId: 'missing-room',
+      userId: 'user-1',
+      timeRange: makeFutureRange('09:00', '10:00'),
+      actorRole: UserRole.USER,
+    })
+
+    // Assert / Then
+    expect(result).toEqual({ ok: false, error: 'ROOM_NOT_FOUND' })
+  })
+
+  it('shouldRejectReservationWhenPolicyFails', () => {
+    // Arrange / Given
+    const { service } = setup()
+
+    // Act / When
+    const result = service.createReservation({
+      id: 'reservation-1',
+      roomId: 'room-1',
+      userId: 'user-1',
+      timeRange: makeFutureRange('09:00', '14:00'),
+      actorRole: UserRole.USER,
+    })
+
+    // Assert / Then
+    expect(result).toEqual({ ok: false, error: 'INVALID_RESERVATION' })
+  })
+
+  it('shouldRejectCancelReservationWhenActorCannotCreateReservations', () => {
+    // Arrange / Given
+    const { service } = setup()
+
+    // Act / When
+    const result = service.cancelReservation('reservation-1', UserRole.MANAGER)
+
+    // Assert / Then
+    expect(result).toEqual({ ok: false, error: 'UNAUTHORIZED' })
+  })
+
+  it('shouldRejectCancelReservationWhenReservationDoesNotExist', () => {
+    // Arrange / Given
+    const { service } = setup()
+
+    // Act / When
+    const result = service.cancelReservation('reservation-1', UserRole.USER)
+
+    // Assert / Then
+    expect(result).toEqual({ ok: false, error: 'RESERVATION_NOT_FOUND' })
+  })
 })

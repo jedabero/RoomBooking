@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "vitest run",
+    "test:unit": "vitest run test/domain",
     "test:integration": "vitest run test/integration",
     "test:system": "vitest run test/integration/delivery",
     "test:watch": "vitest",
