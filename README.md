@@ -1,153 +1,101 @@
-# RoomBooking — Pruebas Unitarias, Integración y Rendimiento
+# RoomBooking
 
 [![CI](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml/badge.svg)](https://github.com/jedabero/RoomBooking/actions/workflows/ci.yml)
 
-> **Nota Codecov:** la carga de cobertura está configurada en GitHub Actions, pero el badge de Codecov se deja pendiente hasta validar la configuración del repositorio en Codecov.
-
-**RoomBooking** es el repositorio académico. **RoomBooker** es el sistema de reserva de salas modelado en este proyecto. El proyecto aplica estrategias de **pruebas unitarias**, **pruebas de integración**, **pruebas de sistema/API simulada** y **pruebas de carga/rendimiento** mediante TypeScript, Vitest y k6.
-
----
+RoomBooking es un proyecto integrador para validar un sistema de reserva de salas mediante pruebas unitarias, pruebas de integración, pruebas de sistema, pruebas de carga/rendimiento y gestión de defectos. El repositorio está implementado en TypeScript y usa Vitest, k6 y GitHub Actions.
 
 ## Dominio
 
-**RoomBooker / RoomBooking** permite gestionar la reserva de salas de reunión. Las reglas de negocio incluyen:
+El sistema permite gestionar reservas de salas de reunión. Las reglas principales del dominio incluyen:
 
-- Validar disponibilidad de una sala en un rango de tiempo.
+- Validar disponibilidad de una sala en un rango horario.
 - Detectar conflictos entre reservas existentes.
-- Aplicar políticas de reserva (duración máxima, anticipación mínima, etc.).
-- Validar datos de entrada de salas y reservas.
-- Controlar permisos según el rol del usuario.
+- Aplicar políticas de reserva, como duración máxima y anticipación permitida.
+- Validar datos de salas y reservas.
+- Controlar permisos según rol de usuario.
+- Permitir cancelación de reservas y desactivación de salas.
 
----
+## Stack
 
-## 🎯 Objetivos
+- TypeScript.
+- Vitest para pruebas automatizadas y cobertura.
+- k6 para pruebas de carga y rendimiento.
+- GitHub Actions para CI y regresión manual de rendimiento.
+- Repositorios in-memory para mantener el foco en reglas de negocio y pruebas reproducibles.
 
-- Aplicar los principios del **Desarrollo Guiado por Pruebas (TDD)** en el dominio elegido.
-- Diseñar pruebas unitarias que validen **reglas de negocio puras** (sin dependencias de bases de datos, HTTP o interfaces gráficas).
-- Implementar las pruebas siguiendo el patrón **AAA (Arrange – Act – Assert)**.
-- Definir y documentar **Clases de Equivalencia** y **Valores Límite**.
-- Expresar los comportamientos esperados mediante **BDD (Given – When – Then)**.
-- Documentar todo el proceso en un **Wiki dentro del repositorio**, siguiendo el modelo del _Taller de Pruebas Unitarias_.
+## Estructura
 
----
-
-### Estructura del proyecto
-
-```
+```text
 src/
 ├── domain/
-│   ├── model/           # Entidades y Value Objects (Room, Reservation, TimeRange, etc.)
-│   └── rules/           # Reglas de negocio (ReservationConflict, Availability, etc.)
+│   ├── model/           # Entidades y Value Objects
+│   └── rules/           # Reglas de negocio
 ├── application/
-│   └── services/        # Servicios de aplicación que coordinan reglas y repositorios
+│   └── services/        # Casos de uso y coordinación de reglas/repositorios
 ├── infrastructure/
 │   └── persistence/     # Repositorios in-memory e interfaces
 └── delivery/
-    └── http/            # API simulada y servidor REST local para performance
+    └── http/            # API simulada y servidor local de rendimiento
 test/
-├── domain/
-│   └── rules/           # Pruebas unitarias del dominio
-└── integration/
-    ├── application/     # Pruebas de integración entre servicios, repositorios y dominio
-    └── delivery/        # Pruebas de sistema/API simulada
+├── domain/              # Pruebas unitarias
+└── integration/         # Pruebas de integración y sistema/API simulada
 perf/
-├── scripts/             # Scripts k6 parametrizados
+├── scripts/             # Scripts k6
 ├── data/                # Datos de prueba
 ├── results/             # Resultados exportados por k6
 └── reports/             # Reportes técnicos y SLO
+docs/
+├── integration/         # Evidencia técnica de integración/sistema
+├── defect-management/   # Preparación y trazabilidad de gestión de defectos
+└── wiki/                # Documentación lista para publicar en GitHub Wiki
 ```
 
----
-
-### Ejecución
-
-```bash
-# Instalar dependencias
-npm install
-
-# Ejecutar pruebas
-npx vitest run
-
-# Ejecutar pruebas unitarias
-npm run test:unit
-
-# Ejecutar pruebas de integración
-npm run test:integration
-
-# Ejecutar pruebas de sistema/API simulada
-npm run test:system
-
-# Reporte de cobertura
-npx vitest run --coverage
-```
-
-Las pruebas deben ejecutarse **de manera automática** sin pasos adicionales.
-
----
-
-## Pruebas de Integración y Sistema
-
-### Objetivo
-
-Validar que las capas principales de RoomBooker colaboran correctamente sin depender de una base de datos real ni de un servidor HTTP real. Las pruebas complementan la suite unitaria previa y verifican flujos completos de reserva, disponibilidad, permisos y administración de salas.
-
-### Arquitectura bajo prueba
-
-La arquitectura probada integra estas capas:
-
-```text
-delivery/API simulada -> application service -> repository in-memory -> domain rules
-```
-
-La API simulada retorna objetos tipo HTTP con `status` y `body`. Esto permite validar estados como `200`, `201`, `400`, `403`, `404` y `409` sin introducir frameworks web innecesarios.
-
-### Capas integradas
-
-| Capa            | Componentes                                                                                | Responsabilidad                         |
-| --------------- | ------------------------------------------------------------------------------------------ | --------------------------------------- |
-| Dominio         | `ReservationConflict`, `Availability`, `ReservationPolicy`, `Permission`, `RoomValidation` | Reglas puras de negocio.                |
-| Aplicación      | `ReservationService`, `RoomService`, `AvailabilityService`                                 | Coordinación de casos de uso.           |
-| Infraestructura | `InMemoryRoomRepository`, `InMemoryReservationRepository`                                  | Persistencia simulada para integración. |
-| Delivery        | `RoomBookingApi`                                                                           | API simulada con respuestas tipo HTTP.  |
-
-### Escenarios cubiertos
-
-| Escenario                                                    | Tipo                | Archivo                                                                                                                           |
-| ------------------------------------------------------------ | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| Crear una reserva válida persiste la reserva.                | Integración         | `test/integration/application/ReservationService.integration.test.ts`                                                             |
-| Crear una reserva con conflicto es rechazado.                | Integración/Sistema | `test/integration/application/ReservationService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts`  |
-| Una reserva consecutiva no se considera conflicto.           | Integración         | `test/integration/application/ReservationService.integration.test.ts`                                                             |
-| Una reserva cancelada no bloquea disponibilidad.             | Integración         | `test/integration/application/ReservationService.integration.test.ts`                                                             |
-| Consultar disponibilidad excluye salas ocupadas e inactivas. | Integración/Sistema | `test/integration/application/AvailabilityService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts` |
-| Una sala inactiva no puede reservarse.                       | Integración         | `test/integration/application/ReservationService.integration.test.ts`                                                             |
-| Un usuario común no puede ejecutar acciones administrativas. | Integración/Sistema | `test/integration/application/RoomService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts`         |
-| Un administrador puede gestionar salas.                      | Integración/Sistema | `test/integration/application/RoomService.integration.test.ts`, `test/integration/delivery/RoomBookingApi.system.test.ts`         |
-
-### Comandos de ejecución
+## Instalación
 
 ```bash
 npm ci
+```
+
+Requiere Node.js 24 o superior.
+
+## Validación principal
+
+```bash
 npm run typecheck
+npm test
+npm run test:coverage
+```
+
+## Scripts disponibles
+
+| Script                     | Propósito                                  |
+| -------------------------- | ------------------------------------------ |
+| `npm run typecheck`        | Validación TypeScript sin emitir archivos. |
+| `npm test`                 | Ejecuta toda la suite Vitest.              |
+| `npm run test:unit`        | Ejecuta pruebas unitarias del dominio.     |
+| `npm run test:integration` | Ejecuta pruebas de integración.            |
+| `npm run test:system`      | Ejecuta pruebas de sistema/API simulada.   |
+| `npm run test:coverage`    | Ejecuta pruebas con reporte de cobertura.  |
+| `npm run perf:serve`       | Levanta el servidor REST local para k6.    |
+| `npm run perf:baseline`    | Ejecuta escenario k6 baseline.             |
+| `npm run perf:load`        | Ejecuta escenario k6 load.                 |
+| `npm run perf:stress`      | Ejecuta escenario k6 stress.               |
+| `npm run perf:spike`       | Ejecuta escenario k6 spike.                |
+| `npm run perf:soak`        | Ejecuta escenario k6 soak académico.       |
+| `npm run perf:regression`  | Ejecuta regresión corta de rendimiento.    |
+
+## Pruebas Automatizadas
+
+La suite valida reglas puras de dominio, flujos de integración entre capas y comportamiento de API simulada.
+
+```bash
 npm run test:unit
 npm run test:integration
 npm run test:system
 npm run test:coverage
 ```
 
-### Cobertura
-
-La cobertura se genera con Vitest y V8 sobre:
-
-```text
-src/domain/**
-src/application/**
-src/infrastructure/**
-src/delivery/**
-```
-
-El servidor local `src/delivery/http/PerformanceServer.ts` se excluye de cobertura porque se valida con k6 como infraestructura de rendimiento, no como lógica funcional de la suite Vitest.
-
-Resultado local de referencia:
+Cobertura local de referencia:
 
 ```text
 Statements   : 99.33% (150/151)
@@ -156,31 +104,11 @@ Functions    : 100% (46/46)
 Lines        : 99.3% (142/143)
 ```
 
-### CI/CD
+El servidor local `src/delivery/http/PerformanceServer.ts` se excluye de cobertura Vitest porque se valida mediante k6 como infraestructura de rendimiento.
 
-El workflow `.github/workflows/ci.yml` se ejecuta en `push` y `pull_request` hacia `main`. El pipeline instala dependencias con `npm ci`, ejecuta typecheck, pruebas unitarias, integración, sistema y cobertura. También publica el directorio `coverage/` como artifact y envía cobertura a Codecov si el repositorio está configurado.
+## Pruebas De Rendimiento
 
-### Restricción de integración
-
-Para usar el pipeline como restricción antes de integrar cambios en `main`, configurar branch protection en GitHub:
-
-1. Ir a `Settings` -> `Branches`.
-2. Crear o editar una regla para `main`.
-3. Activar `Require status checks to pass before merging`.
-4. Seleccionar el workflow/check `CI`.
-5. Activar `Require branches to be up to date before merging` si se desea exigir actualización previa.
-
----
-
-## Pruebas de carga y rendimiento
-
-### Herramienta
-
-k6.
-
-### Servicio local
-
-El servicio REST local usa `node:http` nativo y reutiliza servicios, repositorios in-memory y reglas de dominio existentes.
+El servidor REST local usa `node:http`, servicios de aplicación y repositorios in-memory.
 
 ```bash
 npm run perf:serve
@@ -197,9 +125,7 @@ Endpoints disponibles:
 
 El endpoint `/metrics` expone observabilidad básica del proceso local: uptime, memoria, cantidad de salas y cantidad de reservas en memoria.
 
-### Ejecución de escenarios
-
-En otra terminal, con el servicio activo:
+Con el servidor activo, los escenarios k6 se ejecutan con:
 
 ```bash
 npm run perf:baseline
@@ -210,217 +136,58 @@ npm run perf:soak
 npm run perf:regression
 ```
 
-También se puede ejecutar directamente con k6:
+Los resultados se exportan a `perf/results/`. El análisis consolidado está en `perf/reports/performance-report.md` y los SLO en `perf/reports/slo.md`.
 
-```bash
-k6 run perf/scripts/room_booking_k6.js -e SCENARIO=baseline -e BASE_URL=http://localhost:3000
-```
+Las pruebas de rendimiento se ejecutan sobre servidor local e in-memory. Por tanto, sus resultados no representan infraestructura productiva con base de datos real, autenticación externa o red distribuida.
 
-Alternativa con Docker en Linux:
+## CI/CD
 
-```bash
-docker run --rm --network host -i grafana/k6 run -e BASE_URL=http://localhost:3000 -e SCENARIO=baseline - < perf/scripts/room_booking_k6.js
-```
+El workflow `.github/workflows/ci.yml` se ejecuta en `push` y `pull_request` hacia `main`. El pipeline ejecuta:
 
-### Resultados
+- `npm ci`
+- `npm run typecheck`
+- `npm run test:unit`
+- `npm run test:integration`
+- `npm run test:system`
+- `npm run test:coverage`
 
-Los resultados se almacenan en `perf/results/` mediante `--summary-export`.
+También publica el reporte `coverage/` como artifact y envía cobertura a Codecov cuando el repositorio cuenta con la configuración correspondiente.
 
-### Reporte
+El workflow `.github/workflows/performance.yml` se ejecuta manualmente con `workflow_dispatch` y corre la regresión corta de rendimiento para evitar costos e inestabilidad de escenarios largos.
 
-Ver `perf/reports/performance-report.md` y `perf/reports/slo.md`.
+## Gestión De Defectos
 
-### Wiki
+La estructura para gestión de defectos está en `docs/defect-management/` e incluye:
 
-La documentación oficial se encuentra en `docs/wiki/`, páginas `13` a `16`. La guía para publicar la Wiki real de GitHub está en `docs/wiki/PUBLICACION-WIKI.md`.
+- `README.md`
+- `defect-lifecycle-template.md`
+- `defect-report-template.md`
+- `defect-severity-priority-guide.md`
+- `evidence-guidelines.md`
+- `readiness-checklist.md`
 
-Si el repositorio Wiki ya está clonado como carpeta hermana `../RoomBooking.wiki`, se puede sincronizar la documentación local con:
+Los templates de GitHub Issues están en `.github/ISSUE_TEMPLATE/`. Los labels sugeridos están en `.github/labels.yml`.
 
-```bash
-scripts/sync-wiki.sh
-```
+La trazabilidad de defectos debe relacionar cada issue con evidencia verificable: pruebas, coverage, resultados k6, workflows, commits, documentación o pasos de reproducción.
 
-El script solo copia archivos y muestra `git status`; no hace commit ni push.
+## Documentación
 
-Para la entrega académica se recomienda adjuntar evidencia visual en la Wiki real: ejecución local de k6, archivos JSON generados en `perf/results/` y ejecución del workflow manual `Performance`.
+La documentación detallada se encuentra en `docs/wiki/` y https://github.com/jedabero/RoomBooking/wiki
 
-### CI manual
+## Evidencias Principales
 
-El workflow `.github/workflows/performance.yml` se ejecuta manualmente con `workflow_dispatch` y corre únicamente la regresión de rendimiento para evitar costos e inestabilidad de escenarios largos.
+- Pruebas y cobertura: `docs/integration/`, `coverage/` generado localmente o por CI.
+- Rendimiento: `perf/results/`, `perf/reports/performance-report.md`, `perf/reports/slo.md`.
+- Riesgos de rendimiento: `perf/defectos_rendimiento.md`.
+- Gestión de defectos: GitHub Issues y `docs/defect-management/`.
+- Wiki: `docs/wiki/`.
 
----
-
-## Preparación para gestión de defectos
-
-El repositorio incluye una estructura preparatoria para una fase posterior de gestión formal de defectos:
-
-- [`docs/defect-management/README.md`](docs/defect-management/README.md)
-- [`docs/defect-management/defect-report-template.md`](docs/defect-management/defect-report-template.md)
-- [`docs/defect-management/defect-severity-priority-guide.md`](docs/defect-management/defect-severity-priority-guide.md)
-- [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/)
-
-Esta preparación no reemplaza la gestión formal de defectos ni crea GitHub Issues reales. La trazabilidad definitiva contra pruebas, evidencias, commits, workflows o documentación se realizará en una fase posterior.
-
----
-
-## PARA ENTREGAR
-
-### 1. Repositorio principal
-
-- Código fuente del proyecto con sus pruebas unitarias.
-- Archivo `.gitignore` (excluir `node_modules`, `dist`, `coverage`, etc.).
-- Archivo `integrantes.txt` con los nombres completos del equipo.
-- Ejecución reproducible:
-
-```bash
-npm install
-npx vitest run
-npx vitest run --coverage
-```
-
-- URL pública del repositorio (GitHub, GitLab u otro).
-
----
-
-### 2. Wiki del proyecto (documentación obligatoria)
-
-> El **Wiki** será el documento oficial de entrega.
-> Se recomienda seguir la estructura del **Taller de Pruebas Unitarias**.
-
-#### Estructura sugerida del Wiki
-
-1. **Inicio**
-   - Descripción del dominio y propósito del sistema.
-   - Regla principal o problema a resolver.
-   - Integrantes del equipo.
-
-2. **TDD (Red → Green → Refactor)**
-   - Descripción del ciclo TDD aplicado.
-   - Evidencias de al menos **tres iteraciones** (Rojo, Verde, Refactor).
-   - Capturas, commits o breves explicaciones.
-
-3. **Patrón AAA (Arrange – Act – Assert)**
-   - Ejemplo de test con estructura AAA y breve explicación.
-   - Cómo se asegura la legibilidad de las pruebas.
-
-4. **Clases de Equivalencia y Valores Límite**
-   - Tabla de casos representativos.
-   - Justificación de bordes elegidos y cobertura esperada.
-
-5. **BDD (Behavior Driven Development)**
-   - Escenarios en formato **Given – When – Then**.
-   - Correspondencia con las pruebas unitarias.
-
-6. **Cobertura y Resultados**
-   - Captura del **reporte de cobertura** (Vitest + V8/Istanbul).
-   - Mínimo **80% cobertura global** y **80% en el paquete de dominio**.
-   - Comentario sobre líneas no cubiertas o casos no incluidos.
-
-7. **Conclusiones y Reflexión Final**
-   - Principales aprendizajes del proceso TDD.
-   - Dificultades y cómo se resolvieron.
-   - Beneficios de aplicar AAA y BDD.
-
----
-
-## Métricas de calidad
-
-| Métrica                                     | Requisito mínimo                                                            |
-| ------------------------------------------- | --------------------------------------------------------------------------- |
-| **Cobertura global (Vitest + V8/Istanbul)** | ≥ 80%                                                                       |
-| **Cobertura en paquete de dominio**         | ≥ 80%                                                                       |
-| **Número mínimo de clases de prueba**       | 5                                                                           |
-| **Estilo de nomenclatura**                  | `should...When...()`                                                        |
-| **Buenas prácticas**                        | Código limpio, sin duplicaciones, constantes extraídas, nombres expresivos. |
-
----
-
-## Reflexión esperada en el Wiki
-
-- ¿Qué reglas de negocio fueron más desafiantes de validar con pruebas?
-- ¿Cómo influyó el enfoque **TDD** en el diseño del código?
-- ¿Qué aportó el patrón **AAA** a la comprensión de los tests?
-- ¿Qué utilidad encontró en las **Clases de Equivalencia** y los **escenarios BDD**?
-- ¿Cómo aseguraría la mantenibilidad de sus pruebas a futuro?
-
----
-
-## Rúbrica de evaluación
-
-| **Criterios de evaluación**                           | **Indicadores de cumplimiento**                        | **Excelente (5 pts)**                                             | **Bueno (4 pts)**                                            | **Necesita mejorar (3.5 pts)**                        | **Deficiente (2.5 pts)**                                | **No cumple (0 pts)**               |
-| ----------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------- | ------------------------------------------------------- | ----------------------------------- |
-| **Diseño del dominio**                                | Claridad, coherencia y relevancia del dominio elegido. | Dominio bien definido, con reglas de negocio reales y aplicables. | Dominio comprensible, con reglas básicas bien identificadas. | Dominio poco claro o simplificado en exceso.          | No hay correspondencia entre dominio y pruebas.         | No se define dominio funcional.     |
-| **Estructura y organización del código**              | Implementa arquitectura limpia y buenas prácticas.     | Estructura ordenada, modular y coherente.                         | Cumple la mayoría de principios con leves inconsistencias.   | Organización parcial o sin separación clara de capas. | Estructura confusa o con dependencias innecesarias.     | No presenta estructura funcional.   |
-| **Aplicación del ciclo TDD (Red → Green → Refactor)** | Evidencia de desarrollo iterativo basado en pruebas.   | Documenta al menos 3 iteraciones claras con resultados.           | Se evidencian ciclos parciales o incompletos.                | TDD se menciona pero no se demuestra claramente.      | Sin evidencia práctica de TDD.                          | No aplica TDD.                      |
-| **Patrón AAA (Arrange–Act–Assert)**                   | Claridad y consistencia en los tests.                  | Todos los tests aplican AAA correctamente.                        | Mayoría de los tests con AAA consistente.                    | Estructura irregular o confusa.                       | Solo algunos tests aplican AAA.                         | No se aplica AAA.                   |
-| **Clases de equivalencia y valores límite**           | Definición y aplicación de casos representativos.      | Tabla completa y justificada, reflejada en los tests.             | Casos correctos pero sin justificación detallada.            | Tabla parcial o confusa.                              | Casos incompletos o erróneos.                           | No se aplica la técnica.            |
-| **Escenarios BDD (Given–When–Then)**                  | Coherencia entre escenarios narrativos y pruebas.      | Escenarios claros, completos y coherentes.                        | Escenarios bien planteados pero con faltantes menores.       | Redacción ambigua o poco estructurada.                | Escenarios mal formulados o inconsistentes.             | No aplica BDD.                      |
-| **Cobertura de código (Vitest + V8/Istanbul)**        | Porcentaje de código probado.                          | ≥ 80% global y en dominio.                                        | Entre 70% y 79%.                                             | Entre 60% y 69%.                                      | Menor a 60%.                                            | No presenta cobertura.              |
-| **Documentación en Wiki**                             | Wiki como documento oficial de entrega.                | Completo, estructurado y con evidencias claras.                   | Incluye secciones clave pero sin suficiente detalle.         | Incompleto o poco organizado.                         | Parcial o sin evidencia visual.                         | No presenta Wiki.                   |
-| **Reflexión técnica y conclusiones**                  | Análisis del proceso y aprendizajes.                   | Reflexión profunda y analítica sobre TDD, AAA y BDD.              | Reflexión general con ejemplos.                              | Comentarios superficiales o incompletos.              | Reflexión mínima o incoherente.                         | Sin reflexión.                      |
-| **Calidad general y mantenibilidad**                  | Código, documentación y presentación global.           | Excelente claridad, orden y consistencia técnica.                 | Buen nivel general con leves omisiones.                      | Correcto pero sin cohesión entre partes.              | Deficiente o sin conexión entre código y documentación. | Proyecto incompleto o inejecutable. |
-
-| Rango de puntaje | Desempeño                                                |
-| ---------------- | -------------------------------------------------------- |
-| 45 – 50          | Excelente dominio técnico y metodológico.                |
-| 35 – 44          | Buen trabajo con documentación o cobertura parcial.      |
-| 30 – 34          | Cumple con lo básico pero sin profundidad.               |
-| < 30             | No cumple con los criterios mínimos del taller/proyecto. |
-
----
-
-## Documentación completa
-
-La documentación detallada del proyecto (TDD, AAA, Clases de Equivalencia, BDD, cobertura y conclusiones) se encuentra en [`docs/wiki/`](docs/wiki/) y está diseñada para publicarse en el **Wiki del repositorio**.
-
----
-
-## Referencias
-
-- Myers, G. J., _The Art of Software Testing_ (3rd ed.).
-- Koskela, L., _Effective Unit Testing_.
-- Martin, R. C., _Clean Architecture_.
-- Documentación oficial: _Vitest_, _V8_, _BDD Gherkin Syntax_.
-
----
-
-> **Nota final:**
-> Este proyecto es una **extensión práctica del Taller de Pruebas Unitarias**.
-> Se espera que los estudiantes **repliquen la metodología** aplicada en el taller dentro de su propio dominio.
-> Documentar todo el proceso en el **Wiki** del repositorio y demostrando el uso correcto de **TDD, AAA, Clases de Equivalencia y BDD**.
-
----
-
-## Créditos y uso académico
-
-**Autor original del taller:** César Augusto Vega Fernández
-**Curso:** Testing y Validación de Software
-**Programa:** Maestría en Ingeniería de Software – Universidad de La Sabana
-**Año:** 2025
-
-**Equipo RoomBooking:**
+## Equipo
 
 - Jeison David Berdugo Orejarena
 - Jagler David Velasquez Velasquez
 - Rigo Armando Rosero Castillo
 
-Este taller y su contenido fueron diseñados por el profesor **César Augusto Vega Fernández** como material académico para el curso _Testing y Validación de Software_, impartido en la **Maestría en Ingeniería de Software de la Universidad de La Sabana**.
+## Licencia Y Uso
 
-Su propósito es exclusivamente educativo y está orientado a fortalecer las competencias de los estudiantes en **TDD, AAA, Clases de Equivalencia, BDD** y validación de software en contextos de arquitectura limpia.
-
----
-
-### Licencia de uso
-
-Este material se distribuye bajo la licencia [Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es).
-
-Puedes **usar, adaptar o compartir** este contenido con fines educativos, siempre que:
-
-1. Se reconozca la autoría del profesor **César Augusto Vega Fernández**.
-2. No se utilice con fines comerciales.
-3. Las obras derivadas se distribuyan bajo la misma licencia.
-
----
-
-© Universidad de La Sabana – Facultad de Ingeniería
-Maestría en Ingeniería de Software – 2025
+Proyecto desarrollado con fines académicos como evidencia integradora de pruebas, rendimiento y gestión de defectos en un sistema de reservas de salas.
